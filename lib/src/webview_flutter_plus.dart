@@ -11,7 +11,13 @@ import 'package:mime/mime.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// ignore: implementation_imports
+import 'package:webview_flutter_android/src/webview_flutter_android_legacy.dart';
+// ignore: implementation_imports
+import 'package:webview_flutter_platform_interface/src/webview_flutter_platform_interface_legacy.dart';
+// ignore: implementation_imports
+import 'package:webview_flutter_wkwebview/src/webview_flutter_wkwebview_legacy.dart';
+
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [WebViewController] for the created web view.
@@ -34,9 +40,35 @@ class NavigationRequest {
   }
 }
 
-/// See also: [WebViewPlus.navigationDelegate].
+/// A decision on how to handle a navigation request.
+enum NavigationDecision {
+  /// Prevent the navigation from taking place.
+  prevent,
+
+  /// Allow the navigation to take place.
+  navigate,
+}
+
+/// Decides how to handle a specific navigation request.
+///
+/// The returned [NavigationDecision] determines how the navigation described by
+/// `navigation` should be handled.
+///
+/// See also: [WebView.navigationDelegate].
 typedef NavigationDelegate = FutureOr<NavigationDecision> Function(
     NavigationRequest navigation);
+
+/// Signature for when a [WebView] has started loading a page.
+typedef PageStartedCallback = void Function(String url);
+
+/// Signature for when a [WebView] has finished loading a page.
+typedef PageFinishedCallback = void Function(String url);
+
+/// Signature for when a [WebView] is loading a page.
+typedef PageLoadingCallback = void Function(int progress);
+
+/// Signature for when a [WebView] has failed to load a resource.
+typedef WebResourceErrorCallback = void Function(WebResourceError error);
 
 /// A web view widget for showing html content.
 ///
